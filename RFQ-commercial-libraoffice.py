@@ -1,5 +1,5 @@
 import subprocess
-subprocess.check_call(["sudo", "apt-get", "install", "-y", "libreoffice-writer"])
+#subprocess.check_call(["sudo", "apt-get", "install", "-y", "libreoffice-writer"])
 
 import os
 #import io
@@ -24,9 +24,9 @@ import docx2txt
 import base64
 import json
 import streamlit.components.v1 as components
-# import googletrans as GT
-# from langdetect import detect
-# import textract
+import googletrans as GT
+from langdetect import detect
+import textract
 #import pypandoc
 # import tempfile
 #import pythoncom
@@ -78,7 +78,7 @@ docai_key = "6943fe9ad42e478a8841ae77c1b8d12e"
 
 epoch =1
 i_loop = 0
-# translator = GT.Translator()
+translator = GT.Translator()
 # Ensure COM is initialized
 # pythoncom.CoInitialize()
 
@@ -445,45 +445,7 @@ def main():
                         # remove the doc file
                         os.remove(file.name)
                         # remove the docx file
-                        os.remove(doc+"x")
-
-                        
-                        
-                        # temp_dir = tempfile.mkdtemp()
-                        # # Save the uploaded file to the temporary directory
-                        # doc_file_path = os.path.join(temp_dir, "uploaded.doc")
-                        # with open(doc_file_path, "wb") as temp_file:
-                        #     temp_file.write(file.read())
-
-                        # # Convert the DOC file to DOCX
-                        # save_as_docx(doc_file_path)
-                        
-                        # # docx_file_path = os.path.join(temp_dir, "output.docx")
-                        # # convert(doc_file_path, docx_file_path)
-                        # text += docx2txt.process("uploaded.docx")
-
-                        # # Cleanup: Delete the temporary directory and its contents
-                        # os.remove(doc_file_path)
-                        # #os.remove(docx_file_path)
-                        # os.rmdir(temp_dir)
-                        
-                        
-                        # temp_dir = tempfile.mkdtemp()
-                        # # Save the uploaded file to the temporary directory
-                        # doc_file_path = os.path.join(temp_dir, "uploaded.doc")
-                        # with open(doc_file_path, "wb") as temp_file:
-                        #     temp_file.write(file.read())
-
-                        # # Convert the DOC file to DOCX
-                        # docx_file_path = os.path.join(temp_dir, "output.docx")
-                        # convert(doc_file_path, docx_file_path)
-                        # text += docx2txt.process(docx_file_path)
-
-                        # # Cleanup: Delete the temporary directory and its contents
-                        # os.remove(doc_file_path)
-                        # os.remove(docx_file_path)
-                        # os.rmdir(temp_dir)
-                        
+                        os.remove(doc+"x")    
                         
                     # try: 
                     #     result = detect(text)
@@ -500,16 +462,16 @@ def main():
                     #             text += line.content
                         
                 
-                # try:
-                #     result = detect(text)
-                #     if result!='en':
-                #         raw_trans = translator.translate(text, dest="en") 
-                #         translated_text = raw_trans.text
-                #         st.text('...doc is not in english...')
-                #     else:
-                #         translated_text =  text
-                # except:
-                #     st.text('something wrong')
+                try:
+                    result = detect(text)
+                    if result!='en':
+                        raw_trans = translator.translate(text, dest="en") 
+                        translated_text = raw_trans.text
+                        st.text('...doc is not in english...')
+                    else:
+                        translated_text =  text
+                except:
+                    st.text('something wrong')
                 
                 text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
                 splits = text_splitter.split_text(text)
