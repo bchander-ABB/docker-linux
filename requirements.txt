@@ -1,5 +1,6 @@
 requests==2.31.0
 azure-ai-generative==1.0.0b1
+azure-ai-formrecognizer==3.3.1
 azure-cognitiveservices-speech==1.32.1
 azure-ai-resources==1.0.0b1
 azure-core==1.29.5
@@ -18,4 +19,4 @@ openpyxl
 docx2txt==0.8
 langdetect
 googletrans==4.0.0-rc1
-textract==1.6.5
+textract
