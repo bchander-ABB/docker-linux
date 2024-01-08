@@ -1,0 +1,63 @@
+Steps to create docker container image locally and push to azure:
+
+1. Navigate to the path having script, requirements.txt and dockerfile using cd path/to/the/dockerfile/date
+
+2. create docker container in local machine
+
+#docker build -t rfqcommercialdocker.azurecr.io/rfq-com-dock-image:latest .
+docker build -t rfq-com-linux:latest .
+
+for windows use
+#docker build -t rfqcommercialdocker.azurecr.io/rfq-com-dock-image:ltsc2019 .
+#docker build --build-arg http_proxy=http://gateway.zscaler.net:443 --build-arg https_proxy=http://gateway.zscaler.net:443 -t mcr.microsoft.com/windows/servercore:ltsc2019 .
+#docker build -t rfq-com-dock-image:ltsc2019 .
+
+where 'rfqcommercialdocker' is the name of the acr (azure container registry) that i created in azure.
+'rfq-com-linux' is the name of the image i want to create
+
+
+3. Once the docker image is created we need to push to acr. But for that we need to login to azure cli
+
+docker login rfqcommercialdocker.azurecr.io
+
+it wil lask for username, use 'rfqcommercialdocker'
+and for password use 'adAq3Qt8qUV4vEK9QJ0xSCv+hlLe/CsHMYFaoS5uk4+ACRCnnga8'
+
+you can get this from azure acr portal under 'access keys' by clicking 'Admin user'
+
+
+4. Tag your locally built Docker image with the full path to your Azure Container Registry.
+docker tag your-image-name <your-acr-name>.azurecr.io/your-image-name:latest
+
+#docker tag rf-com-docker-image rfqcommercialdocker.azurecr.io/rf-com-docker-image:latest
+
+for windows use
+#docker tag rf-com-docker-image:ltsc2019 rfqcommercialdocker.azurecr.io/rf-com-docker-image:ltsc2019
+#docker tag rfq-container-py-win:1809 rfqcommercialdocker.azurecr.io/rfq-container-py-win:1809
+
+docker tag rfq-com-linux:latest rfqcommercialdocker.azurecr.io/rfq-com-linux:latest
+
+
+5. Push the tagged Docker image to your Azure Container Registry.
+docker push <your-acr-name>.azurecr.io/your-image-name:latest
+
+#docker push rfqcommercialdocker.azurecr.io/rf-com-docker-image:latest
+
+for windows use
+#docker push rfqcommercialdocker.azurecr.io/rf-com-docker-image:ltsc2019
+#docker push rfqcommercialdocker.azurecr.io/rf-com-docker-image:ltsc2019
+
+docker push rfqcommercialdocker.azurecr.io/rfq-com-linux:latest
+
+
+6. (only if required) scaleup windows container based webapp memory to avoid memory loss issues
+
+az webapp config appsettings set --resource-group INOPC-Analytics-Dev --name rfq-commercial-test3 --settings WEBSITE_MEMORY_LIMIT_MB=15000
+
+az webapp config appsettings list --name MyWebapp --resource-group MyResourceGroup --subscription MySubscription
+
+
+
+
+
+ 
